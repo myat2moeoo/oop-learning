@@ -1,27 +1,24 @@
 <?php
-require_once "config/Database.php";
-require_once "classes/Product.php";
+require_once "../config/Database.php";
+require_once "../classes/Product.php";
 
 $database = new Database();
 $db = $database->getConnection();
 
 $product = new Product($db);
-$stmt = $product->readAll();
+$stmt = $product->readDeleted();
 ?>
+
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Product Info</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Products</title>
 </head>
-
 <body>
-    <h1>Product List</h1>
-    <div style="display: flex; justify-content: flex-start; gap: 20px; margin-bottom: 15px;">
-        <a href="public/add_product.php">Add New Product</a>
-        <a href="public/deleted_product.php">Restore</a>
-    </div>
-
+    <h1>Deleted Products</h1>
+    <a href="../index.php">Back to Product List</a>
     <table border="1" cellpadding="10">
         <tr>
             <th>ID</th>
@@ -37,12 +34,10 @@ $stmt = $product->readAll();
                 <td><?= $row['description']; ?></td>
                 <td><?= $row['price']; ?></td>
                 <td>
-                    <a href="public/edit_product.php?id=<?= $row['id']; ?>">Edit</a> |
-                    <a href="public/delete_product.php?id=<?= $row['id']; ?>">Delete</a>
+                    <a href="restore_product.php?id=<?= $row['id']; ?>">Restore</a>
                 </td>
             </tr>
         <?php } ?>
     </table>
 </body>
-
 </html>
