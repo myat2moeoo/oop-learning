@@ -2,14 +2,11 @@
 require_once "../config/Database.php";
 require_once "../classes/Product.php";
 
-// connect to database
 $database = new Database();
 $db = $database->getConnection();
 
-// create product object
 $product = new Product($db);
 
-// handle form submission
 if ($_POST) {
     $product->name = $_POST['name'];
     $product->description = $_POST['description'];
@@ -24,8 +21,10 @@ if ($_POST) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Product</title>
 </head>
 <body>

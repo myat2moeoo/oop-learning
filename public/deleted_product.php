@@ -27,17 +27,17 @@ $stmt = $product->readDeleted();
             <th>Price</th>
             <th>Actions</th>
         </tr>
-        <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { ?>
-            <tr>
-                <td><?= $row['id']; ?></td>
-                <td><?= $row['name']; ?></td>
-                <td><?= $row['description']; ?></td>
-                <td><?= $row['price']; ?></td>
-                <td>
-                    <a href="restore_product.php?id=<?= $row['id']; ?>">Restore</a>
-                </td>
-            </tr>
-        <?php } ?>
+        <?php
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['description']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['price']) . "</td>";
+            echo "<td><a href='restore_product.php?id=" . $row['id'] . "'>Restore</a></td>";
+            echo "</tr>";
+        }
+        ?>
     </table>
 </body>
 </html>

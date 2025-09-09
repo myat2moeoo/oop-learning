@@ -17,11 +17,8 @@ class Product
     // Create product
     public function create()
     {
-        $query = "INSERT INTO " . $this->table_name . " 
-                  (name, description, price, is_deleted) VALUES (:name, :description, :price, 0)";
-
+        $query = "INSERT INTO " . $this->table_name . " (name, description, price, is_deleted) VALUES (:name, :description, :price, 0)";
         $stmt = $this->conn->prepare($query);
-
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":description", $this->description);
         $stmt->bindParam(":price", $this->price);
@@ -30,19 +27,19 @@ class Product
     }
 
     // Read all products
-    public function readAll()
-    {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE is_deleted = 0 order by id ASC";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
+    // public function readAll()
+    // {
+    //     $query = "SELECT * FROM " . $this->table_name . " WHERE is_deleted = 0 order by id ASC";
+    //     $stmt = $this->conn->prepare($query);
+    //     $stmt->execute();
 
-        return $stmt;
-    }
+    //     return $stmt;
+    // }
 
     // Get single product
     public function readOne()
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE id = ? AND is_deleted = 0 LIMIT 1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE id = ? AND is_deleted = 0";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->id);
         $stmt->execute();
@@ -53,12 +50,8 @@ class Product
     // Update product
     public function update()
     {
-        $query = "UPDATE " . $this->table_name . "
-                  SET name = :name, description = :description, price = :price
-                  WHERE id = :id";
-
+        $query = "UPDATE " . $this->table_name . "SET name = :name, description = :description, price = :priceWHERE id = :id";
         $stmt = $this->conn->prepare($query);
-
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":description", $this->description);
         $stmt->bindParam(":price", $this->price);
@@ -96,5 +89,24 @@ class Product
         return $stmt;
     }
 
+    public function readWithPagination($offset, $row)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE is_deleted = 0 ORDER BY id ASC LIMIT :offset, :row";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':row', $row, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    public function countAll()
+    {
+        $query = "SELECT COUNT(*) as total FROM " . $this->table_name . " WHERE is_deleted = 0";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['total'];
+    }
 }
 ?>
